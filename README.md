@@ -4,6 +4,8 @@ Giddyup, partner! Welcome to WEST, the Wild West of quests and rewards, designed
 
 ## Features
 
+⚡️ **Light weight**: WEST is a lightweight, easy-to-use platform that can be integrated into your existing product or service in minutes.
+
 🌟 **Quest Creation**: Easily design custom quests and challenges tailored to your product or service, encouraging users to explore and engage with your platform.
 
 🏆 **Reward Management**: Incentivize users with a variety of rewards, including badges, points, discounts, or exclusive content, to motivate them to complete quests and stay engaged.
@@ -13,6 +15,41 @@ Giddyup, partner! Welcome to WEST, the Wild West of quests and rewards, designed
 🔧 **Integration**: Seamlessly integrate WEST with your existing platform or service, making it simple for users to participate in quests and redeem rewards.
 
 🔐 **Customization**: Tailor quests, rewards, and the overall experience to match your brand identity and values, creating a cohesive and immersive experience for users.
+
+## Supported Channels & Flow
+
+- Github
+  - Follow Github organization
+  - Star Github Repository
+  - Fork Github Repository
+  - Create Github Issue
+  - Create Github Pull Request
+- Mail
+  - Subscribe to Newsletter
+- Slack
+  - Join Slack Community
+  - Say Hi in Slack
+- Discord
+  - Join Discord Community
+  - Say Hi in Discord
+- Survey
+  - Fill out Survey
+- Twitter
+  - Follow on Twitter
+  - Tweet about WEST
+- Referral
+  - Invite a Friend
+- YouTube
+  - Subscribe Youtube channel
+- Instagram
+  - Follow on Instagram
+- LinkedIn
+  - Follow on LinkedIn
+- Facebook
+  - Follow on Facebook
+  - Join Facebook Group
+- Reddit
+  - Join subreddit
 
 ## Getting Started
 
