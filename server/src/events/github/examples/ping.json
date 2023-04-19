@@ -1,0 +1,55 @@
+{
+  "zen": "Practicality beats purity.",
+  "hook_id": 410558680,
+  "hook": {
+    "type": "Organization",
+    "id": 410558680,
+    "name": "web",
+    "active": true,
+    "events": ["*"],
+    "config": {
+      "content_type": "json",
+      "insecure_ssl": "0",
+      "url": "https://west.ngrok.io/events/github"
+    },
+    "updated_at": "2023-04-19T05:22:42Z",
+    "created_at": "2023-04-19T05:22:42Z",
+    "url": "https://api.github.com/orgs/gridaco/hooks/410558680",
+    "ping_url": "https://api.github.com/orgs/gridaco/hooks/410558680/pings",
+    "deliveries_url": "https://api.github.com/orgs/gridaco/hooks/410558680/deliveries"
+  },
+  "organization": {
+    "login": "gridaco",
+    "id": 86340715,
+    "node_id": "MDEyOk9yZ2FuaXphdGlvbjg2MzQwNzE1",
+    "url": "https://api.github.com/orgs/gridaco",
+    "repos_url": "https://api.github.com/orgs/gridaco/repos",
+    "events_url": "https://api.github.com/orgs/gridaco/events",
+    "hooks_url": "https://api.github.com/orgs/gridaco/hooks",
+    "issues_url": "https://api.github.com/orgs/gridaco/issues",
+    "members_url": "https://api.github.com/orgs/gridaco/members{/member}",
+    "public_members_url": "https://api.github.com/orgs/gridaco/public_members{/member}",
+    "avatar_url": "https://avatars.githubusercontent.com/u/86340715?v=4",
+    "description": "We make opensource design2code technologies"
+  },
+  "sender": {
+    "login": "softmarshmallow",
+    "id": 16307013,
+    "node_id": "MDQ6VXNlcjE2MzA3MDEz",
+    "avatar_url": "https://avatars.githubusercontent.com/u/16307013?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/softmarshmallow",
+    "html_url": "https://github.com/softmarshmallow",
+    "followers_url": "https://api.github.com/users/softmarshmallow/followers",
+    "following_url": "https://api.github.com/users/softmarshmallow/following{/other_user}",
+    "gists_url": "https://api.github.com/users/softmarshmallow/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/softmarshmallow/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/softmarshmallow/subscriptions",
+    "organizations_url": "https://api.github.com/users/softmarshmallow/orgs",
+    "repos_url": "https://api.github.com/users/softmarshmallow/repos",
+    "events_url": "https://api.github.com/users/softmarshmallow/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/softmarshmallow/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+}
