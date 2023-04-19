@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Req, Request } from "@nestjs/common";
 import { PlayerService } from "./players.service";
 
-@Controller("/events/github")
+@Controller("/players")
 export class PlayerController {
   constructor(private readonly service: PlayerService) {}
 
