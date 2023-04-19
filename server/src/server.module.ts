@@ -8,8 +8,8 @@ import { QuestsModule } from "quests";
 @Module({
   imports: [
     AppsModule,
-    PlayerModule,
     QuestsModule,
+    PlayerModule,
     PlayerQuestsModule,
     GithubEventsModule,
   ],

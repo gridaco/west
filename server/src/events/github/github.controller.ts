@@ -1,7 +1,9 @@
 import { Controller, Post, Req, Request } from "@nestjs/common";
 import { GithubWebhookService } from "./github.service";
+import { ApiExcludeController } from "@nestjs/swagger";
 
 @Controller("/events/github")
+@ApiExcludeController() // internal use for listening to github webhooks
 export class GithubWebhookController {
   constructor(private readonly service: GithubWebhookService) {}
 
