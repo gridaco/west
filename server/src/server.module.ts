@@ -1,10 +1,18 @@
 import { Module } from "@nestjs/common";
-import { AppsModule } from "apps";
 import { GithubEventsModule } from "events/github";
+import { AppsModule } from "apps";
+import { PlayerQuestsModule } from "player-quests";
 import { PlayerModule } from "players";
+import { QuestsModule } from "quests";
 
 @Module({
-  imports: [AppsModule, PlayerModule, GithubEventsModule],
+  imports: [
+    AppsModule,
+    PlayerModule,
+    QuestsModule,
+    PlayerQuestsModule,
+    GithubEventsModule,
+  ],
   controllers: [],
   providers: [],
 })

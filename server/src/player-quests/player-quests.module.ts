@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { PlayerQuestsController } from "./player-quests.controller";
-import { PlayerQuestsServicervice } from "./player-quests.service";
+import { PlayerQuestsService } from "./player-quests.service";
 import { PrismaService } from "services";
 
 @Module({
