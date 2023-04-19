@@ -9,3 +9,55 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+model App {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("apps")
+}
+
+model Player {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  PlayerQuest PlayerQuest[]
+
+  @@map("players")
+}
+
+model Quest {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  quest       String
+  reward      Int
+  items       String[]
+  memo        String?
+  claimed     Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+  PlayerQuest PlayerQuest[]
+
+  @@map("quests")
+}
+
+model PlayerQuest {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  playerId    String      @map("player_id") @db.ObjectId
+  player      Player      @relation(fields: [playerId], references: [id])
+  questId     String      @map("quest_id") @db.ObjectId
+  quest       Quest       @relation(fields: [questId], references: [id])
+  status      QuestStatus
+  progress    Float
+  startedAt   DateTime    @default(now())
+  completedAt DateTime?
+  updatedAt   DateTime    @updatedAt
+
+  @@unique([playerId, questId])
+  @@map("player_quests")
+}
+
+enum QuestStatus {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
