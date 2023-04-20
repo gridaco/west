@@ -53,10 +53,11 @@ export class PlayerService {
     }
   }
 
-  async quests({ player }: { player: string }) {
+  async quests({ player: playerId, app }: { player: string; app: App }) {
+    const player = await this.get({ app, id: playerId });
     return await this.prisma.playerQuest.findMany({
       where: {
-        playerId: player,
+        playerId: player.id,
       },
     });
   }

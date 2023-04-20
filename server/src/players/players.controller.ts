@@ -32,7 +32,8 @@ export class PlayerController {
     @Param("id") id: string,
     @Req() request: AuthorizedAppRequest,
   ) {
-    this.service.quests({
+    return this.service.quests({
+      app: request.app,
       player: id,
     });
   }
