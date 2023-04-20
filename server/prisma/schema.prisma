@@ -80,15 +80,17 @@ model Quest {
 
 model Challenge {
   id        String                 @id @default(auto()) @map("_id") @db.ObjectId
-  memo      String?
-  type      ChallengeType          @default(CUSTOM)
-  resource  String
-  condition String
+  memo      String? // editable
+  type      ChallengeType          @default(CUSTOM) // fixed
+  resource  String // fixed
+  condition String // fixed
   questId   String                 @map("quest_id") @db.ObjectId
   quest     Quest                  @relation(fields: [questId], references: [id])
-  reward    Float
+  reward    Float // fixed
   instances PlayerQuestChallenge[]
 
+  // like stripe's price if user wants to change the reward related values, they should archive the old one and create a new one.
+  // archived challenges will not ne cloned to new instances of the player quest
   archived  Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
