@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
@@ -40,6 +41,25 @@ export class PlayerQuestsService {
       });
 
       const player = await this.players.get({ id: playerId, app: app });
+
+      const { conccurency } = quest;
+
+      const n = await this.prisma.playerQuest.count({
+        where: {
+          questId: quest.id,
+          player: {
+            id: player.id,
+          },
+        },
+      });
+
+      if (conccurency && n >= conccurency) {
+        // if n is not falsy, validate.
+        // if n in falsy, it means that the quest has no conccurency limit
+        throw new ConflictException(
+          `Player ${playerId} already has ${n} quests of type ${questId}`,
+        );
+      }
 
       return this.prisma.playerQuest.create({
         data: {

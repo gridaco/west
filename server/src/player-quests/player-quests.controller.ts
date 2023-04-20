@@ -10,13 +10,24 @@ import {
 import { PlayerQuestsService } from "./player-quests.service";
 import { StartNewPlayerQuestRequestBody } from "./player-quests.objects";
 import { ApiKeyGuard, AuthorizedAppRequest } from "api-key";
-
+import { ApiBody, ApiResponse } from "@nestjs/swagger";
 @Controller("/players/quests")
 @UseGuards(ApiKeyGuard)
 export class PlayerQuestsController {
   constructor(private readonly service: PlayerQuestsService) {}
 
   @Post("/start")
+  @ApiBody({
+    type: StartNewPlayerQuestRequestBody,
+  })
+  @ApiResponse({
+    description: "Player quest created and started",
+    status: 201,
+  })
+  @ApiResponse({
+    description: "Player already has a quest of this type >= conccurency",
+    status: 409,
+  })
   async new(
     @Req() request: AuthorizedAppRequest,
     @Body() body: StartNewPlayerQuestRequestBody,
