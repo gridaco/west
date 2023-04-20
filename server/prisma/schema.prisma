@@ -16,41 +16,61 @@ model App {
   description String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  quests      Quest[]
+  players     Player[]
 
   @@map("apps")
 }
 
 model Player {
   id          String        @id @default(auto()) @map("_id") @db.ObjectId
-  PlayerQuest PlayerQuest[]
+  appId       String        @map("app_id") @db.ObjectId
+  app         App           @relation(fields: [appId], references: [id])
+  quests PlayerQuest[]
 
   @@map("players")
 }
 
 model Quest {
   id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  appId       String        @map("app_id") @db.ObjectId
+  app         App           @relation(fields: [appId], references: [id])
   quest       String
   reward      Int
-  items       String[]
+  challenges  Challenge[]
   memo        String?
-  claimed     Boolean       @default(false)
   createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
   PlayerQuest PlayerQuest[]
+  archived    Boolean       @default(false)
 
   @@map("quests")
 }
 
+model Challenge {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  item     String
+  memo     String?
+  questId  String  @map("quest_id") @db.ObjectId
+  quest    Quest   @relation(fields: [questId], references: [id])
+  archived Boolean @default(false)
+
+  @@map("quest_sub_challenges")
+}
+
 model PlayerQuest {
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
-  playerId    String      @map("player_id") @db.ObjectId
-  player      Player      @relation(fields: [playerId], references: [id])
-  questId     String      @map("quest_id") @db.ObjectId
-  quest       Quest       @relation(fields: [questId], references: [id])
-  status      QuestStatus
-  progress    Float
-  startedAt   DateTime    @default(now())
-  completedAt DateTime?
-  updatedAt   DateTime    @updatedAt
+  id                 String      @id @default(auto()) @map("_id") @db.ObjectId
+  playerId           String      @map("player_id") @db.ObjectId
+  player             Player      @relation(fields: [playerId], references: [id])
+  questId            String      @map("quest_id") @db.ObjectId
+  quest              Quest       @relation(fields: [questId], references: [id])
+  verifiedChallenges String[]
+  claimed            Boolean     @default(false)
+  status             QuestStatus
+  progress           Float
+  createdAt          DateTime    @default(now())
+  completedAt        DateTime?
+  updatedAt          DateTime    @updatedAt
 
   @@unique([playerId, questId])
   @@map("player_quests")
