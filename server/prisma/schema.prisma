@@ -45,11 +45,17 @@ type Hook {
 }
 
 model Player {
-  id     String        @id @default(auto()) @map("_id") @db.ObjectId
-  appId  String        @map("app_id") @db.ObjectId
-  app    App           @relation(fields: [appId], references: [id])
-  quests PlayerQuest[]
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  identifier  String
+  email       String?
+  username    String?
+  description String?
+  appId       String        @map("app_id") @db.ObjectId
+  app         App           @relation(fields: [appId], references: [id])
+  quests      PlayerQuest[]
+  metadata    Json          @default("{}")
 
+  @@unique([appId, identifier])
   @@map("players")
 }
 
