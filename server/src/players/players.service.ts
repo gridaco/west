@@ -7,6 +7,16 @@ import { CreateNewPlayerRequestBody } from "./players.objects";
 export class PlayerService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async list({ app }: { app: App }) {
+    return this.prisma.player.findMany({
+      where: {
+        app: {
+          id: app.id,
+        },
+      },
+    });
+  }
+
   async create({
     app,
     identifier,

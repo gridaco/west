@@ -10,9 +10,11 @@ import {
 import { PlayerService } from "./players.service";
 import { CreateNewPlayerRequestBody } from "./players.objects";
 import { ApiKeyGuard, AuthorizedAppRequest } from "api-key";
+import { ApiTags } from "@nestjs/swagger";
 
-@UseGuards(ApiKeyGuard)
+@ApiTags("Player")
 @Controller("/players")
+@UseGuards(ApiKeyGuard)
 export class PlayerController {
   constructor(private readonly service: PlayerService) {}
 
@@ -24,6 +26,21 @@ export class PlayerController {
     return this.service.create({
       app: request.app,
       ...body,
+    });
+  }
+
+  @Get()
+  async list(@Req() request: AuthorizedAppRequest) {
+    return this.service.list({
+      app: request.app,
+    });
+  }
+
+  @Get("/:id")
+  async get(@Param("id") id: string, @Req() request: AuthorizedAppRequest) {
+    return this.service.get({
+      app: request.app,
+      id: id,
     });
   }
 

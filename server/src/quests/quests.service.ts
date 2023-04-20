@@ -7,32 +7,6 @@ import { CreateNewQuestRequestBody } from "./quests.objects";
 export class QuestsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create({
-    name,
-    currency,
-    memo,
-    challenges,
-    app,
-  }: CreateNewQuestRequestBody & { app: App }) {
-    return this.prisma.quest.create({
-      data: {
-        app: {
-          connect: { id: app.id },
-        },
-        // required fields
-        name,
-        currency,
-        memo,
-        challenges: {
-          create: challenges?.map((challenge) => challenge),
-        },
-      },
-      include: {
-        challenges: true,
-      },
-    });
-  }
-
   async get({ id, app }: { id: string; app: App }) {
     try {
       // fetch the quest
@@ -58,5 +32,44 @@ export class QuestsService {
       }
       throw e;
     }
+  }
+
+  async list({ app }: { app: App }) {
+    return this.prisma.quest.findMany({
+      where: {
+        app: {
+          id: app.id,
+        },
+      },
+      include: {
+        challenges: true,
+      },
+    });
+  }
+
+  async create({
+    name,
+    currency,
+    memo,
+    challenges,
+    app,
+  }: CreateNewQuestRequestBody & { app: App }) {
+    return this.prisma.quest.create({
+      data: {
+        app: {
+          connect: { id: app.id },
+        },
+        // required fields
+        name,
+        currency,
+        memo,
+        challenges: {
+          create: challenges?.map((challenge) => challenge),
+        },
+      },
+      include: {
+        challenges: true,
+      },
+    });
   }
 }

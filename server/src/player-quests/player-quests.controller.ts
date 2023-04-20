@@ -13,7 +13,8 @@ import {
   TooManyPlayerQuestResponseData,
 } from "./player-quests.objects";
 import { ApiKeyGuard, AuthorizedAppRequest } from "api-key";
-import { ApiBody, ApiResponse } from "@nestjs/swagger";
+import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
+@ApiTags("Player Quests")
 @Controller("/players/quests")
 @UseGuards(ApiKeyGuard)
 export class PlayerQuestsController {
