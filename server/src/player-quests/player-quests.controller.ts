@@ -14,7 +14,6 @@ import { StartNewPlayerQuestRequestBody } from "./player-quests.objects";
 export class PlayerQuestsController {
   constructor(private readonly service: PlayerQuestsService) {}
 
-  @Post()
   @Post("/start")
   async new(
     @Req() request: Request,
