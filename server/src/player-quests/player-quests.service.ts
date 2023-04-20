@@ -8,6 +8,7 @@ import { App, Prisma, Quest } from "@prisma/client";
 import { PlayerService } from "players";
 import { QuestsService } from "quests";
 import { PrismaService } from "services";
+import { TooManyPlayerQuestResponseData } from "./player-quests.objects";
 
 @Injectable()
 export class PlayerQuestsService {
@@ -44,20 +45,27 @@ export class PlayerQuestsService {
 
       const { conccurency } = quest;
 
-      const n = await this.prisma.playerQuest.count({
+      const qs = await this.prisma.playerQuest.findMany({
         where: {
           questId: quest.id,
           player: {
             id: player.id,
           },
         },
+        include: {
+          _count: true,
+        },
       });
 
-      if (conccurency && n >= conccurency) {
+      if (conccurency && qs.length >= conccurency) {
         // if n is not falsy, validate.
         // if n in falsy, it means that the quest has no conccurency limit
-        throw new ConflictException(
-          `Player ${playerId} already has ${n} quests of type ${questId}`,
+        throw new TooManyPlayerQuestResponseData(
+          player.id,
+          quest.id,
+          qs.length,
+          conccurency,
+          qs.map((q) => q.id),
         );
       }
 

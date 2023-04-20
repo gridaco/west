@@ -8,7 +8,10 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { PlayerQuestsService } from "./player-quests.service";
-import { StartNewPlayerQuestRequestBody } from "./player-quests.objects";
+import {
+  StartNewPlayerQuestRequestBody,
+  TooManyPlayerQuestResponseData,
+} from "./player-quests.objects";
 import { ApiKeyGuard, AuthorizedAppRequest } from "api-key";
 import { ApiBody, ApiResponse } from "@nestjs/swagger";
 @Controller("/players/quests")
@@ -26,6 +29,7 @@ export class PlayerQuestsController {
   })
   @ApiResponse({
     description: "Player already has a quest of this type >= conccurency",
+    type: TooManyPlayerQuestResponseData,
     status: 409,
   })
   async new(
