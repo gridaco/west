@@ -31,7 +31,7 @@ model AppKey {
   memo      String?
   appId     String    @map("app_id") @db.ObjectId
   app       App       @relation(fields: [appId], references: [id])
-  key       String
+  key       String    @unique
   createdAt DateTime  @default(now())
   revokedAt DateTime?
   expiresAt DateTime?
