@@ -10,7 +10,7 @@ import {
 import { QuestsService } from "./quests.service";
 import { ApiKeyGuard, AuthorizedAppRequest } from "api-key";
 import { CreateNewQuestRequestBody } from "./quests.objects";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBody, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Quests")
 @Controller("/quests")

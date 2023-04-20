@@ -81,7 +81,7 @@ model Quest {
 model Challenge {
   id        String                 @id @default(auto()) @map("_id") @db.ObjectId
   memo      String?
-  type      String
+  type      ChallengeType          @default(CUSTOM)
   resource  String
   condition String
   questId   String                 @map("quest_id") @db.ObjectId
@@ -94,6 +94,33 @@ model Challenge {
   updatedAt DateTime @updatedAt
 
   @@map("quest_sub_challenges")
+}
+
+enum ChallengeType {
+  GITHUB
+  GITHUB_FOLLOW
+  GITHUB_COMMIT
+  GITHUB_ISSUE
+  GITHUB_PULL_REQUEST
+  GITHUB_STAR
+  GITHUB_WATCH
+  GITHUB_FORK
+  GITHUB_RELEASE
+  GITHUB_PULL_REQUEST_REVIEW
+  GITHUB_PULL_REQUEST_REVIEW_COMMENT
+  GITHUB_ISSUE_COMMENT
+  GITHUB_COMMIT_COMMENT
+  GITHUB_PULL_REQUEST_COMMENT
+  GITHUB_PULL_REQUEST_REVIEW_SUBMITTED
+  INSTAGRAM
+  INSTAGRAM_FOLLOW
+  INSTAGRAM_LIKE
+  INSTAGRAM_COMMENT
+  INSTAGRAM_POST
+  SLACK
+  SLACK_JOIN
+  SLACK_MESSAGE
+  CUSTOM
 }
 
 model PlayerQuest {
