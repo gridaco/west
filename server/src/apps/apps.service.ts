@@ -7,6 +7,18 @@ import * as crypto from "crypto";
 export class AppsService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async list({ workspace }: { workspace: string }) {
+    return this.prisma.app.findMany({
+      where: { workspace },
+    });
+  }
+
+  async get({ id, workspace }: { id: string; workspace: string }) {
+    return this.prisma.app.findMany({
+      where: { id, workspace },
+    });
+  }
+
   async create({
     workspace,
     data,
@@ -18,6 +30,7 @@ export class AppsService {
 
     const app = await this.prisma.app.create({
       data: {
+        workspace,
         name: data.name,
         description: data.description || "",
         keys: {

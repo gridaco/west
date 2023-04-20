@@ -1,8 +1,12 @@
-import { IsNotEmpty } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { IsNotEmpty, IsOptional } from "class-validator";
 
 export class AppCreateRequestBody {
+  @ApiProperty()
   @IsNotEmpty()
   name: string;
 
-  description: string;
+  @ApiProperty()
+  @IsOptional()
+  description?: string;
 }

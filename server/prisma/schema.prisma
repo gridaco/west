@@ -12,6 +12,7 @@ datasource db {
 
 model App {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  workspace   String
   appId       String   @unique @default(cuid()) @map("app_id")
   name        String
   description String   @default("")
@@ -68,7 +69,7 @@ model Quest {
   memo        String?
   currency    String
   instances   PlayerQuest[]
-  conccurency Int?           @default(1)
+  conccurency Int?          @default(1)
 
   archived  Boolean  @default(false)
   createdAt DateTime @default(now())
