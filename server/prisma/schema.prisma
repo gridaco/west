@@ -23,9 +23,9 @@ model App {
 }
 
 model Player {
-  id          String        @id @default(auto()) @map("_id") @db.ObjectId
-  appId       String        @map("app_id") @db.ObjectId
-  app         App           @relation(fields: [appId], references: [id])
+  id     String        @id @default(auto()) @map("_id") @db.ObjectId
+  appId  String        @map("app_id") @db.ObjectId
+  app    App           @relation(fields: [appId], references: [id])
   quests PlayerQuest[]
 
   @@map("players")
@@ -43,17 +43,24 @@ model Quest {
   updatedAt   DateTime      @updatedAt
   PlayerQuest PlayerQuest[]
   archived    Boolean       @default(false)
+  currency    String
 
   @@map("quests")
 }
 
 model Challenge {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  item     String
-  memo     String?
-  questId  String  @map("quest_id") @db.ObjectId
-  quest    Quest   @relation(fields: [questId], references: [id])
-  archived Boolean @default(false)
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  memo      String?
+  type      String
+  resource  String
+  condition String
+  questId   String  @map("quest_id") @db.ObjectId
+  quest     Quest   @relation(fields: [questId], references: [id])
+  archived  Boolean @default(false)
+  reward    Float
+  instances PlayerQuestChallenge[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("quest_sub_challenges")
 }
@@ -64,7 +71,7 @@ model PlayerQuest {
   player             Player      @relation(fields: [playerId], references: [id])
   questId            String      @map("quest_id") @db.ObjectId
   quest              Quest       @relation(fields: [questId], references: [id])
-  verifiedChallenges String[]
+  challenges         PlayerQuestChallenge[]
   claimed            Boolean     @default(false)
   status             QuestStatus
   progress           Float
@@ -74,6 +81,26 @@ model PlayerQuest {
 
   @@unique([playerId, questId])
   @@map("player_quests")
+}
+
+model PlayerQuestChallenge{
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  playerQuestId String @map("player_quest_id") @db.ObjectId
+  playerQuest PlayerQuest @relation(fields: [playerQuestId], references: [id])
+  challengeId String @map("challenge_id") @db.ObjectId
+  challenge Challenge @relation(fields: [challengeId], references: [id])
+  verified Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([playerQuestId, challengeId])
+  @@map("player_quest_challenges")
+}
+
+type Reward {
+  currency String
+  amount   Int
 }
 
 enum QuestStatus {
