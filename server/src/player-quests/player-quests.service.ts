@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { Prisma, Quest } from "@prisma/client";
+import { App, Prisma, Quest } from "@prisma/client";
 import { PlayerService } from "players";
 import { QuestsService } from "quests";
 import { PrismaService } from "services";
@@ -25,18 +25,21 @@ export class PlayerQuestsService {
   }
 
   async create({
+    app,
     player: playerId,
     quest: questId,
   }: {
+    app: App;
     player: string;
     quest: string;
   }) {
     try {
-      const quest = await this.quests.get(questId, {
-        app: "", // FIXME:
+      const quest = await this.quests.get({
+        id: questId,
+        app: app,
       });
 
-      const player = await this.players.get(playerId);
+      const player = await this.players.get({ id: playerId, app: app });
 
       return this.prisma.playerQuest.create({
         data: {
@@ -62,6 +65,7 @@ export class PlayerQuestsService {
         }
         throw new BadRequestException();
       }
+      throw e;
     }
   }
 
