@@ -19,13 +19,25 @@ model App {
   quests      Quest[]
   players     Player[]
   hooks       Hook[]
+  keys        AppKey[]
 
   @@map("apps")
+}
+
+model AppKey {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  appId     String    @map("app_id") @db.ObjectId
+  app       App       @relation(fields: [appId], references: [id])
+  key       String
+  createdAt DateTime  @default(now())
+  revokedAt DateTime?
+  expiresAt DateTime?
 }
 
 type Hook {
   type      String
   url       String
+  secret    String
   createdAt DateTime @default(now())
 }
 
