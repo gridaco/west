@@ -12,8 +12,9 @@ datasource db {
 
 model App {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  appId       String   @unique @default(cuid()) @map("app_id")
   name        String
-  description String
+  description String   @default("")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   quests      Quest[]
@@ -26,6 +27,8 @@ model App {
 
 model AppKey {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  issuer    String
+  memo      String?
   appId     String    @map("app_id") @db.ObjectId
   app       App       @relation(fields: [appId], references: [id])
   key       String

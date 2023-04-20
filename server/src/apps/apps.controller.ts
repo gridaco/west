@@ -8,7 +8,7 @@ export class AppsController {
 
   @Post()
   async new(@Req() request: Request, @Body() body: AppCreateRequestBody) {
-    this.service.create({
+    return this.service.create({
       workspace: "", // FIXME:
       data: body,
     });

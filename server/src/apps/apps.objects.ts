@@ -4,6 +4,5 @@ export class AppCreateRequestBody {
   @IsNotEmpty()
   name: string;
 
-  @IsNotEmpty()
   description: string;
 }
