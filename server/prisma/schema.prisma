@@ -115,3 +115,15 @@ enum QuestStatus {
   COMPLETED
   ABANDONED
 }
+
+model EventLog {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  type        String
+  appId       String   @map("app_id") @db.ObjectId
+  playerId    String   @map("player_id") @db.ObjectId
+  questId     String   @map("quest_id") @db.ObjectId
+  challengeId String   @map("challenge_id") @db.ObjectId
+  timestamp   DateTime @default(now())
+
+  @@map("event_logs")
+}
