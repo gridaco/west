@@ -8,4 +8,13 @@ export class QuestsService {
   async create(data: any) {
     return this.prisma.quest.create({ data });
   }
+
+  async get(id: string, verification: { app: string }) {
+    return await this.prisma.quest.findUnique({
+      where: { id },
+      include: {
+        challenges: true,
+      },
+    });
+  }
 }
