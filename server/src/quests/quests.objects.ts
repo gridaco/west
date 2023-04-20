@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import type { ChallengeType as TChallengeType } from "@prisma/client";
 import { ChallengeType } from "@prisma/client";
 import { Type } from "class-transformer";
 import {
@@ -7,7 +8,10 @@ import {
   IsNotEmpty,
   IsOptional,
   ValidateNested,
+  IsIn,
 } from "class-validator";
+
+const CHALLEGE_TYPES = Object.values(ChallengeType);
 
 class InlineCreateChallenge {
   @ApiProperty()
@@ -16,7 +20,8 @@ class InlineCreateChallenge {
 
   @ApiProperty()
   @IsNotEmpty()
-  type: ChallengeType;
+  @IsIn(CHALLEGE_TYPES)
+  type: TChallengeType;
 
   @ApiProperty()
   @IsNotEmpty()
