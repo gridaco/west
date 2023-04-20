@@ -44,10 +44,10 @@ export class PlayerQuestsService {
       return this.prisma.playerQuest.create({
         data: {
           player: {
-            connect: player,
+            connect: { id: player.id },
           },
           quest: {
-            connect: quest,
+            connect: { id: quest.id },
           },
           challenges: {
             create: quest.challenges.map((challenge) => ({
