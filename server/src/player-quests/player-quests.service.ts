@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { App, Prisma, Quest } from "@prisma/client";
+import { App, Challenge, Prisma, Quest } from "@prisma/client";
 import { PlayerService } from "players";
 import { QuestsService } from "quests";
 import { PrismaService } from "services";
@@ -78,12 +78,17 @@ export class PlayerQuestsService {
             connect: { id: quest.id },
           },
           challenges: {
-            create: quest.challenges.map((challenge) => ({
-              challenge: {
-                connect: challenge,
-              },
-            })),
+            create: quest.challenges
+              .filter((c) => !c.archived)
+              .map((challenge) => ({
+                challenge: {
+                  connect: { id: challenge.id },
+                },
+              })),
           },
+        },
+        include: {
+          challenges: true,
         },
       });
     } catch (e) {
@@ -97,13 +102,71 @@ export class PlayerQuestsService {
     }
   }
 
-  async check(id: string) {
-    //
-    throw new Error("Not implemented");
+  async check({ id, app }: { id: string; app: App }) {
+    const quest = await this.prisma.playerQuest.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        challenges: {
+          include: {
+            challenge: true,
+          },
+        },
+      },
+    });
+
+    // check acl (this will throw if the app is not allowed to access the player)
+    const player = await this.players.get({ id: quest.playerId, app: app });
+
+    // check if the quest is completed
+    const { challenges } = quest;
+
+    // check with master's condition
+    const checks = await Promise.all(
+      challenges.map(({ challenge }) => check_challenge({ challenge })),
+    );
+
+    const completions = checks.filter((c) => c.completed);
+
+    // update the quest as checked
+    const updated_challenges = this.prisma.playerQuestChallenge.updateMany({
+      where: {
+        id: { in: completions.map((c) => c.id) },
+      },
+      data: {
+        verified: true,
+      },
+    });
+
+    // return the result
+    return {
+      total: challenges.length,
+      completed: completions.length,
+      ...{ ...quest, challenges: updated_challenges },
+    };
   }
 
   async claim(id: string) {
     //
     throw new Error("Not implemented");
   }
+}
+
+async function check_challenge({
+  challenge,
+}: {
+  challenge: Challenge;
+}): Promise<Challenge & { completed: boolean }> {
+  const { type } = challenge;
+
+  switch (type) {
+    case "GITHUB_STAR":
+      throw new Error("Not implemented");
+    case "CUSTOM":
+      throw new Error("Not implemented");
+    default:
+      throw new BadRequestException();
+  }
+  //
 }

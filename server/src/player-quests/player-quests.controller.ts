@@ -58,7 +58,10 @@ export class PlayerQuestsController {
     @Req() request: AuthorizedAppRequest,
     @Body() body,
   ) {
-    return this.service.check(id);
+    return this.service.check({
+      app: request.app,
+      id,
+    });
   }
 
   @Post("/:id/claim")
