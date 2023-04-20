@@ -1,13 +1,36 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { App, Prisma } from "@prisma/client";
 import { PrismaService } from "services";
+import { CreateNewQuestRequestBody } from "./quests.objects";
 
 @Injectable()
 export class QuestsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: any) {
-    return this.prisma.quest.create({ data });
+  async create({
+    name,
+    currency,
+    memo,
+    challenges,
+    app,
+  }: CreateNewQuestRequestBody & { app: App }) {
+    return this.prisma.quest.create({
+      data: {
+        app: {
+          connect: { id: app.id },
+        },
+        // required fields
+        name,
+        currency,
+        memo,
+        challenges: {
+          create: challenges?.map((challenge) => challenge),
+        },
+      },
+      include: {
+        challenges: true,
+      },
+    });
   }
 
   async get({ id, app }: { id: string; app: App }) {
