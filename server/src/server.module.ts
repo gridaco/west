@@ -4,10 +4,12 @@ import { AppsModule } from "apps";
 import { PlayerQuestsModule } from "player-quests";
 import { PlayerModule } from "players";
 import { QuestsModule } from "quests";
+import { HooksModule } from "hooks";
 
 @Module({
   imports: [
     AppsModule,
+    HooksModule,
     QuestsModule,
     PlayerModule,
     PlayerQuestsModule,
