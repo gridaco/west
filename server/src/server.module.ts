@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { PrismaService } from "services";
 import { GithubEventsModule } from "events/github";
 import { AppsModule } from "apps";
 import { PlayerQuestsModule } from "player-quests";
@@ -16,6 +17,6 @@ import { HooksModule } from "hooks";
     GithubEventsModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [PrismaService],
 })
 export class ServerModule {}
