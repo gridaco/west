@@ -11,15 +11,17 @@ datasource db {
 }
 
 model App {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  node        String     @unique @default(cuid()) @map("node_id")
   workspace   String
-  appId       String   @unique @default(cuid()) @map("app_id")
   name        String
-  description String   @default("")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  description String     @default("")
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   quests      Quest[]
   players     Player[]
+  resources   Resource[]
+  currencies  Currency[]
   hooks       Hook[]
   keys        AppKey[]
 
@@ -47,6 +49,7 @@ type Hook {
 
 model Player {
   id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  node        String        @unique @default(cuid()) @map("node_id")
   identifier  String
   email       String?
   username    String?
@@ -61,13 +64,15 @@ model Player {
 }
 
 model Quest {
-  id          String        @id @default(auto()) @map("_id") @db.ObjectId
-  appId       String        @map("app_id") @db.ObjectId
-  app         App           @relation(fields: [appId], references: [id])
-  name        String
-  challenges  Challenge[]
-  memo        String?
-  currency    String
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  node       String      @unique @default(cuid()) @map("node_id")
+  appId      String      @map("app_id") @db.ObjectId
+  app        App         @relation(fields: [appId], references: [id])
+  name       String
+  challenges Challenge[]
+  memo       String?
+  bonus      Reward?
+
   instances   PlayerQuest[]
   conccurency Int?          @default(1)
 
@@ -78,15 +83,57 @@ model Quest {
   @@map("quests")
 }
 
+model Resource {
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId
+  node      String       @unique @default(cuid()) @map("node_id")
+  name      String
+  type      ResourceType
+  url       String
+  spec      Json
+  appId     String       @map("app_id") @db.ObjectId
+  app       App          @relation(fields: [appId], references: [id])
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@unique([appId, type, url])
+  @@map("resources")
+}
+
+enum ResourceType {
+  EVENTSOURCE
+  CUSTOM
+}
+
+model Currency {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  node      String    @unique @default(cuid()) @map("node_id")
+  display   String    @map("name")
+  memo      String?
+  code      String
+  symbol    String?
+  startDate DateTime  @default(now())
+  endDate   DateTime?
+  isDefault Boolean   @default(false)
+  appId     String    @map("app_id") @db.ObjectId
+  app       App       @relation(fields: [appId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([appId, code])
+  @@map("currencies")
+}
+
 model Challenge {
   id        String                 @id @default(auto()) @map("_id") @db.ObjectId
+  node      String                 @unique @default(cuid()) @map("node_id")
   memo      String? // editable
   type      ChallengeType          @default(CUSTOM) // fixed
   resource  String // fixed
   condition String // fixed
   questId   String                 @map("quest_id") @db.ObjectId
   quest     Quest                  @relation(fields: [questId], references: [id])
-  reward    Float // fixed
+  reward    Reward? // fixed
+  mandatory Boolean                @default(false) // fixed
   instances PlayerQuestChallenge[]
 
   // like stripe's price if user wants to change the reward related values, they should archive the old one and create a new one.
@@ -127,6 +174,7 @@ enum ChallengeType {
 
 model PlayerQuest {
   id          String                 @id @default(auto()) @map("_id") @db.ObjectId
+  node        String                 @unique @default(cuid()) @map("node_id")
   playerId    String                 @map("player_id") @db.ObjectId
   player      Player                 @relation(fields: [playerId], references: [id])
   questId     String                 @map("quest_id") @db.ObjectId
@@ -145,6 +193,7 @@ model PlayerQuest {
 
 model PlayerQuestChallenge {
   id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  node          String      @unique @default(cuid()) @map("node_id")
   playerQuestId String      @map("player_quest_id") @db.ObjectId
   playerQuest   PlayerQuest @relation(fields: [playerQuestId], references: [id])
   challengeId   String      @map("challenge_id") @db.ObjectId
@@ -160,7 +209,7 @@ model PlayerQuestChallenge {
 
 type Reward {
   currency String
-  amount   Int
+  value    Int
 }
 
 enum QuestStatus {
@@ -171,6 +220,7 @@ enum QuestStatus {
 
 model EventLog {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  node        String   @unique @default(cuid()) @map("node_id")
   type        String
   appId       String   @map("app_id") @db.ObjectId
   playerId    String   @map("player_id") @db.ObjectId
