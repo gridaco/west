@@ -1,3 +1,5 @@
+![west thumbnail](./docs/thumbnail.png)
+
 # WEST: Quests & Rewards for Growth Hacking Early Stage Products & Startups
 
 Giddyup, partner! Welcome to WEST, the Wild West of quests and rewards, designed to fuel the growth of early-stage products and startups. WEST is a SaaS platform that helps you gamify your customer experience with engaging quests and enticing rewards to boost user engagement, loyalty, and satisfaction.
