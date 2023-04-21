@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { App, Prisma } from "@prisma/client";
 import { PrismaService } from "services";
 import { CreateNewQuestRequestBody } from "./quests.objects";
@@ -51,9 +55,27 @@ export class QuestsService {
     name,
     currency,
     memo,
+    bonus,
     challenges,
     app,
   }: CreateNewQuestRequestBody & { app: App }) {
+    // vlidate the challenges (check for duplicates)
+    // unique by type + resource
+    const duplicates = challenges?.filter(
+      (challenge, index, self) =>
+        self.findIndex(
+          (c) => c.type === challenge.type && c.resource === challenge.resource,
+        ) !== index,
+    );
+
+    if (duplicates.length) {
+      throw new ConflictException(
+        `Duplicate challenges: ${duplicates
+          .map((d) => `{${d.type} : ${d.resource}}`)
+          .join(", ")}`,
+      );
+    }
+
     return this.prisma.quest.create({
       data: {
         app: {
@@ -61,10 +83,23 @@ export class QuestsService {
         },
         // required fields
         name,
-        currency,
         memo,
+        bonus: {
+          set: {
+            amount: bonus?.amount || 0,
+            currency: bonus?.currency || currency,
+          },
+        },
         challenges: {
-          create: challenges?.map((challenge) => challenge),
+          create: challenges?.map((challenge) => ({
+            ...challenge,
+            reward: {
+              set: {
+                ...challenge.reward,
+                currency: challenge.reward?.currency || currency,
+              },
+            },
+          })),
         },
       },
       include: {

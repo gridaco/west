@@ -10,7 +10,7 @@ import {
 import { QuestsService } from "./quests.service";
 import { ApiKeyGuard, AuthorizedAppRequest } from "api-key";
 import { CreateNewQuestRequestBody } from "./quests.objects";
-import { ApiBody, ApiTags } from "@nestjs/swagger";
+import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Quests")
 @Controller("/quests")
@@ -18,6 +18,12 @@ import { ApiBody, ApiTags } from "@nestjs/swagger";
 export class QuestsController {
   constructor(private readonly service: QuestsService) {}
 
+  @ApiResponse({
+    status: 201,
+  })
+  @ApiResponse({
+    status: 409,
+  })
   @Post()
   async new(
     @Req() request: AuthorizedAppRequest,
