@@ -48,30 +48,29 @@ type Hook {
 }
 
 model Player {
-  id          String        @id @default(auto()) @map("_id") @db.ObjectId
-  node        String        @unique @default(cuid()) @map("node_id")
+  id          String               @id @default(auto()) @map("_id") @db.ObjectId
+  node        String               @unique @default(cuid()) @map("node_id")
   identifier  String
   email       String?
   username    String?
   description String?
-  balance     Json          @default("{}")
-  balances BalanceTransaction[]
+  balance     Json                 @default("{}")
+  balances    BalanceTransaction[]
   rewards     RewardTransaction[]
-  appId       String        @map("app_id") @db.ObjectId
-  app         App           @relation(fields: [appId], references: [id])
+  appId       String               @map("app_id") @db.ObjectId
+  app         App                  @relation(fields: [appId], references: [id])
   quests      PlayerQuest[]
-  metadata    Json          @default("{}")
-
+  metadata    Json                 @default("{}")
 
   @@unique([appId, identifier])
   @@map("players")
 }
 
 model Quest {
-  id         String      @id @default(auto()) @map("_id") @db.ObjectId
-  node       String      @unique @default(cuid()) @map("node_id")
-  appId      String      @map("app_id") @db.ObjectId
-  app        App         @relation(fields: [appId], references: [id])
+  id         String              @id @default(auto()) @map("_id") @db.ObjectId
+  node       String              @unique @default(cuid()) @map("node_id")
+  appId      String              @map("app_id") @db.ObjectId
+  app        App                 @relation(fields: [appId], references: [id])
   name       String
   challenges Challenge[]
   rewards    RewardTransaction[]
@@ -112,22 +111,22 @@ enum ResourceType {
 }
 
 model Currency {
-  id           String               @id @default(auto()) @map("_id") @db.ObjectId
-  node         String               @unique @default(cuid()) @map("node_id")
-  display      String               @map("name")
-  memo         String?
-  code         String
-  symbol       String?
-  startDate    DateTime             @default(now())
-  endDate      DateTime?
-  isDefault    Boolean              @default(false)
-  appId        String               @map("app_id") @db.ObjectId
-  app          App                  @relation(fields: [appId], references: [id])
-  createdAt    DateTime             @default(now())
-  updatedAt    DateTime             @updatedAt
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  node      String    @unique @default(cuid()) @map("node_id")
+  display   String    @map("name")
+  memo      String?
+  code      String
+  symbol    String?
+  startDate DateTime  @default(now())
+  endDate   DateTime?
+  isDefault Boolean   @default(false)
+  appId     String    @map("app_id") @db.ObjectId
+  app       App       @relation(fields: [appId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   balance_transactions BalanceTransaction[]
-  reward_transactions RewardTransaction[]
+  reward_transactions  RewardTransaction[]
 
   @@unique([appId, code])
   @@map("currencies")
@@ -253,24 +252,24 @@ model BalanceTransaction {
 }
 
 model RewardTransaction {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  node String @unique @default(cuid()) @map("node_id")
-  memo String?
-  currencyId String @map("currency_id") @db.ObjectId
-  currency Currency @relation(fields: [currencyId], references: [id])
-  amount Int
-  type String
-  playerId String @map("player_id") @db.ObjectId
-  player Player @relation(fields: [playerId], references: [id])
-  questId String @map("quest_id") @db.ObjectId
-  quest Quest @relation(fields: [questId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  node       String   @unique @default(cuid()) @map("node_id")
+  memo       String?
+  currencyId String   @map("currency_id") @db.ObjectId
+  currency   Currency @relation(fields: [currencyId], references: [id])
+  amount     Int
+  type       String
+  playerId   String   @map("player_id") @db.ObjectId
+  player     Player   @relation(fields: [playerId], references: [id])
+  questId    String   @map("quest_id") @db.ObjectId
+  quest      Quest    @relation(fields: [questId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   @@map("reward_transactions")
 }
 
 type Reward {
   currency String
-  amount    Int
+  amount   Int
 }
